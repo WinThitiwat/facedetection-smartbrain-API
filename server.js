@@ -38,14 +38,12 @@ const app = express();
 
 
 // ---- Middleware ---
+app.use(cors()); // to allow to be accessed from anywhere, so any domain can access
 app.use(bodyParser.json()); // to parse data and transform into json
-app.use(cors()); // to allow to connect between client and  webserver
 
 
 // ---- all requests ------
-// app.get('/', (req, res)=>{
-//   res.send(req.);
-// })
+
 app.get('/', (req, res) => {res.send("It is working")});
 
 app.post('/signin', (req, res) => {signin.handleSignin(req, res, db, bcrypt)});
