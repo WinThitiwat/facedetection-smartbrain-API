@@ -43,13 +43,21 @@ app.use(cors({origin: true})); // to allow to be accessed from anywhere, so any 
 app.use(bodyParser.json()); // to parse data and transform into json
 app.use(morgan("combined"))
 
+// -- Configuring CORS
+
+var corsOptions = {
+  origin: 'https://facedetection-smartbrain-front.herokuapp.com',
+  optionsSuccessStatus: 200
+}
+
+
 // ---- all requests ------
 
 app.get('/', (req, res) => {res.send("It is working")});
 
 app.post('/signin', (req, res) => {signin.signinAuthentication(req, res, db, bcrypt)});
 
-app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
+app.post('/register', cors(corsOptions) , (req, res) => {register.handleRegister(req, res, db, bcrypt)});
 
 app.get('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileGet(req, res, db)});
 
