@@ -1,10 +1,14 @@
+// import {redisClient} from '../sessionHandler';
+const sessionHandler = require('../sessionHandler');
+// import {signToken,setToken,createSessions,getAuthTokenId } from '../sessionHandler';
+
 const jwt = require('jsonwebtoken');
-const redis = require('redis');
+// const redis = require('redis');
+// const redisClient = require('../redisHandler');
 
 // setup Redis
-// const redisClient = redis.createClient(process.env.REDIS_URI);
-// const redisClient = redis.createClient("redis://redis:6379");
-const redisClient = redis.createClient(process.env.REDIS_URL);
+// const redisClient = redis.createClient(process.env.REDIS_URL);
+// const redisClient = redis.createClient();
 
 
 const handleSignin = ((req, res, db, bcrypt)=>{
@@ -29,49 +33,48 @@ const handleSignin = ((req, res, db, bcrypt)=>{
       .catch(err => Promise.reject("Wrong credential"));
 })
 
-const getAuthTokenId = (req, res) => {
-  const { authorization } = req.headers;
-  return redisClient.get(authorization, (err, reply) => {
-    if (err || !reply){
-      return res.status(400).json("Unauthorized");
-    }
-    return res.json({id: reply});
-  })
+// const getAuthTokenId = (req, res) => {
+//   const { authorization } = req.headers;
+//   return redisClient.get(authorization, (err, reply) => {
+//     if (err || !reply){
+//       return res.status(400).json("Unauthorized");
+//     }
+//     return res.json({id: reply});
+//   })
+// }
 
-}
+// const signToken = (email) => {
+//   const jwtPayload = { email };
+//   return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '2 days'});
+// }
 
-const signToken = (email) => {
-  const jwtPayload = { email };
-  return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '2 days'});
-}
-
-const setToken = (key, value) => {
-  return Promise.resolve(redisClient.set(key, value))
-}
+// const setToken = (key, value) => {
+//   return Promise.resolve(redisClient.set(key, value))
+// }
 
 // Create JWT token, return user data
-const createSessions = (user) => {
-  const {email, id} = user;
-  const token = signToken(email);
-  return setToken(token, id)
-    .then(() => { 
-      return {success: 'true', userId: id, token: token}
-    })
-    .catch(console.log)
-}
+// const createSessions = (user) => {
+//   const {email, id} = user;
+//   const token = signToken(email);
+//   return setToken(token, id)
+//     .then(() => { 
+//       return {success: 'true', userId: id, token: token}
+//     })
+//     .catch(console.log)
+// }
 
 const signinAuthentication = (req, res, db, bcrypt) =>{
   const {authorization} = req.headers;
-  return authorization ? getAuthTokenId(req, res) : 
+  return authorization ? sessionHandler.getAuthTokenId(req, res) : 
     handleSignin(req, res, db, bcrypt)
       .then(data => {
-        return data.id && data.email ? createSessions(data) : Promise.reject(data)
+        return data.id && data.email ? sessionHandler.createSessions(data) : Promise.reject(data)
       })
       .then(session => res.json(session))
       .catch(err => res.status(400).json(err))
 
 }
 module.exports = {
-  signinAuthentication: signinAuthentication,
-  redisClient: redisClient
+  signinAuthentication: signinAuthentication
+  // redisClient: redisClient
 }

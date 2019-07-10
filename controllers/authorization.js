@@ -1,4 +1,6 @@
-const redisClient = require('./signin').redisClient;
+const redisClient = require('../redisHandler');
+
+// const redisClient = require('./signin').redisClient;
 
 // middleware - to check if there is unauthorized users attempting to access server
 const requireAuth = (req, res, next) => {
