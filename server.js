@@ -43,13 +43,6 @@ app.use(cors()); // to allow to be accessed from anywhere, so any domain can acc
 app.use(bodyParser.json()); // to parse data and transform into json
 app.use(morgan("combined"))
 
-// -- Configuring CORS
-
-var corsOptions = {
-  origin: 'https://facedetection-smartbrain-front.herokuapp.com'
-}
-
-
 // ---- all requests ------
 
 app.get('/', (req, res) => {res.send("It is working")});
@@ -66,9 +59,10 @@ app.put('/image', auth.requireAuth, (req, res) => {image.handleImage(req, res, d
 
 app.post('/imageurl', auth.requireAuth, (req, res) => {image.handleApiCall(req, res)});
 
+const port = process.env.PORT || 3000;
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`app is running on port ${process.env.PORT}`);
+app.listen(port, () => {
+  console.log(`app is running on port ${port}`);
 });
 
 
