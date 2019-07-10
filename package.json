@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --legacy-watch server.js"
+    "start": "node server.js",
+    "start:dev": "nodemon --watch"
   },
   "keywords": [],
   "author": "win",
