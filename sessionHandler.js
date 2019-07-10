@@ -5,7 +5,7 @@ const redisClient = require('./redisHandler');
 
 const signToken = (email) => {
   const jwtPayload = { email };
-  return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '2 days'});
+  return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '1m'});
 }
 
 const setToken = (key, value) => {
