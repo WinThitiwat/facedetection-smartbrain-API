@@ -46,8 +46,7 @@ app.use(morgan("combined"))
 // -- Configuring CORS
 
 var corsOptions = {
-  origin: 'https://facedetection-smartbrain-front.herokuapp.com',
-  optionsSuccessStatus: 200
+  origin: 'https://facedetection-smartbrain-front.herokuapp.com'
 }
 
 
