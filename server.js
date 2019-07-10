@@ -39,7 +39,7 @@ const app = express();
 
 
 // ---- Middleware ---
-app.use(cors()); // to allow to be accessed from anywhere, so any domain can access
+app.use(cors({origin: true})); // to allow to be accessed from anywhere, so any domain can access
 app.use(bodyParser.json()); // to parse data and transform into json
 app.use(morgan("combined"))
 
