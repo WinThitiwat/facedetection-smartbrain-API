@@ -2,7 +2,7 @@
 const sessionHandler = require('../sessionHandler');
 // import {signToken,setToken,createSessions,getAuthTokenId } from '../sessionHandler';
 
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 // const redis = require('redis');
 // const redisClient = require('../redisHandler');
 

@@ -5,7 +5,7 @@ const redisClient = require('./redisHandler');
 
 const signToken = (email) => {
   const jwtPayload = { email };
-  return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '2 days'});
+  return jwt.sign(jwtPayload, 'JWT_SECRET', {expiresIn: '1m'});
 }
 
 const setToken = (key, value) => {
@@ -33,11 +33,25 @@ const getAuthTokenId = (req, res) => {
   })
 }
 
+const deleteToken = (key) => {
+  return Promise.resolve(redisClient.del(key))
+}
+
+const deleteCurrentUserSession = (authorization) => {
+  return deleteToken(authorization)
+        .then(() => {
+          console.log("deleting")
+          return {signoutSuccess: 'true'}
+        })
+        .catch(console.log)
+}
+
 module.exports = {
   signToken,
   setToken,
   createSessions,
-  getAuthTokenId
+  getAuthTokenId,
+  deleteCurrentUserSession
 }
 
 

@@ -23,18 +23,21 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
+const signout = require('./controllers/signout');
 
 // create connection between server and database
 const db = knex({
   client: 'pg',
   connection: {
     connectionString : process.env.DATABASE_URL,
-    ssl: true
+    ssl: true,
+
+    
   }
 });
 
 
-// init 
+// init
 const app = express();
 
 
@@ -47,9 +50,11 @@ app.use(morgan("combined"))
 
 app.get('/', (req, res) => {res.send("It is working")});
 
+app.put('/signout', (req, res) => {signout.handleSignout(req, res)});
+
 app.post('/signin', (req, res) => {signin.signinAuthentication(req, res, db, bcrypt)});
 
-app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
+app.post('/register', (req, res) => {register.registerAuthentication(req, res, db, bcrypt)});
 
 app.get('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileGet(req, res, db)});
 
