@@ -23,18 +23,24 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
+const signout = require('./controllers/signout');
 
 // create connection between server and database
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString : process.env.DATABASE_URL,
-    ssl: true
+    // connectionString : process.env.DATABASE_URL,
+    // ssl: true,
+
+    host: 'localhost',
+    user: 'postgres',
+    database: 'smart-brain',
+    password: 'xR76wG3X',
   }
 });
 
 
-// init 
+// init
 const app = express();
 
 
@@ -46,6 +52,8 @@ app.use(morgan("combined"))
 // ---- all requests ------
 
 app.get('/', (req, res) => {res.send("It is working")});
+
+app.put('/signout', (req, res) => {signout.handleSignout(req, res)});
 
 app.post('/signin', (req, res) => {signin.signinAuthentication(req, res, db, bcrypt)});
 
